@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<config>
+    <modules>
+        <PagarMe_RefusedTransactions>
+            <version>3.0.0</version>
+        </PagarMe_RefusedTransactions>
+    </modules>
+    <global>
+        <models>
+            <pagarme_refusedtransactions>
+                <class>PagarMe_RefusedTransactions_Model</class>
+            </pagarme_refusedtransactions>
+        </models>
+        <helpers>
+            <pagarme_refusedtransactions>
+                <class>PagarMe_RefusedTransactions_Helper</class>
+            </pagarme_refusedtransactions>
+        </helpers>
+        <blocks>
+            <pagarme_refusedtransactions>
+                <class>PagarMe_RefusedTransactions_Block</class>
+            </pagarme_refusedtransactions>
+        </blocks>
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <pagarme_refusedtransactions>
+                    <file>pagarme/pagarme_refusedtransactions.xml</file>
+                </pagarme_refusedtransactions>
+            </updates>
+        </layout>
+    </adminhtml>
+    <default>
+        <news>
+            <pagarme_refusedtransactions>
+                <active>1</active>
+            </pagarme_refusedtransactions>
+        </news>
+    </default>
+</config>
