@@ -86,4 +86,13 @@ trait AdminAccessProvider
             return $page->findById('config_edit_form') != null;
         }, 10);
     }
+
+    public function closeAdminPopup($page)
+    {
+        $popup = $page->find('css', '.message-popup-head a');
+
+        if ($popup instanceof \Behat\Mink\Element\NodeElement) {
+            $popup->click();
+        }
+    }
 }
