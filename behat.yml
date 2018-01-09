@@ -35,6 +35,11 @@ default:
         - %paths.base%/tests/acceptance/features/payment_method_availability.feature
       contexts:
         - PaymentMethodAvailabilityContext
+    refused_transactions:
+      paths:
+        - %paths.base%/tests/acceptance/features/refused_transactions.feature
+      contexts:
+        - RefusedTransactionsContext
     #one_step_checkout:
     #  paths:
     #    - %paths.base%/tests/acceptance/features/one_step_checkout.feature
