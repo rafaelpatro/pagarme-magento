@@ -4,18 +4,52 @@ namespace PagarMe\Magento\Test\Helper;
 
 trait AdminAccessProvider
 {
-    public function loginOnAdmin($adminUser)
+    private $adminUser;
+
+    /**
+     * @return string
+     */
+    private function getAdminPassword()
+    {
+        return 'admin123';
+    }
+
+    /**
+     * @Given an admin user
+     * @Then as an Admin user
+     */
+    public function aAdminUser()
+    {
+        $this->adminUser = \Mage::getModel('admin/user')
+            ->setData(
+                array(
+                    'username'  => mktime() . '_admin',
+                    'firstname' => 'Admin',
+                    'lastname'  => 'Admin',
+                    'email'     => mktime() . '@admin.com',
+                    'password'  => $this->getAdminPassword(),
+                    'is_active' => 1
+                )
+            )->save();
+
+        $this->adminUser->setRoleIds(
+            array(1)
+        )
+            ->setRoleUserId($this->adminUser->getUserId())
+            ->saveRelations();
+    }
+
+    /**
+     * @When I access the admin
+     */
+    public function iAccessTheAdmin()
     {
         $session = $this->getSession();
         $session->visit(getenv('MAGENTO_URL') . 'index.php/admin');
+
         $page = $session->getPage();
-
-        if ($page->find('css', '.link-logout')) {
-            return true;
-        }
-
         $inputLogin = $page->find('named', array('id', 'username'));
-        $inputLogin->setValue($adminUser->getUsername());
+        $inputLogin->setValue($this->adminUser->getUsername());
 
         $inputPassword = $page->find('named', array('id', 'login'));
         $inputPassword->setValue($this->getAdminPassword());
@@ -23,7 +57,10 @@ trait AdminAccessProvider
         $page->pressButton('Login');
     }
 
-    public function goToSystemSettings()
+    /**
+     * @When go to system configuration page
+     */
+    public function goToSystemConfigurationPage()
     {
         $session = $this->getSession();
         $page = $session->getPage();
@@ -39,5 +76,14 @@ trait AdminAccessProvider
 
         $page->find('named', array('link', 'Configuration'))
             ->click();
+
+        $page->find('named', array('link', 'Payment Methods'))
+            ->click();
+
+        $page->find('css', '#payment_pagarme_configurations-head')->click();
+
+        $this->spin(function () use ($page) {
+            return $page->findById('config_edit_form') != null;
+        }, 10);
     }
 }
