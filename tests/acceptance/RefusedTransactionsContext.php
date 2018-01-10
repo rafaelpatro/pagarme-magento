@@ -29,6 +29,10 @@ class RefusedTransactionsContext extends RawMinkContext
      */
     public function aRefusedTransactionsListShouldBeVisible()
     {
-        throw new PendingException();
+        $session = $this->getSession();
+
+        $page = $session->getPage();
+
+        $page->findById('pagarme_refused_transactions')->isVisible();
     }
 }
