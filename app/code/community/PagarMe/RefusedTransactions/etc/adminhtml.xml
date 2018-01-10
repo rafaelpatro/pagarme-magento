@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
     <menu>
-        <pagarme_menus module="pagarme_refusedtransactions">
+        <pagarmetab module="pagarme_refusedtransactions">
             <title>Pagar.me</title>
             <sort_order>100</sort_order>
             <children>
-                <refused_transactions module="pagarme_refusedtransactions">
+                <index module="pagarme_refusedtransactions">
                     <title>Refused Transactions</title>
                     <action>adminhtml/refusedtransactions</action>
-                </refused_transactions>
+                </index>
             </children>
-        </pagarme_menus>
+        </pagarmetab>
     </menu>
     <acl>
         <resources>
-            <all>
-                <title>Allow Everything</title>
-            </all>
             <admin>
                 <children>
-                    <pagarme_menus translate="title">
-                        <title>Pagar.me</title>
+                    <refusedtransactions translate="title" module="pagarme_refusedtransactions">
+                        <title>Refused transactions</title>
                         <sort_order>1000</sort_order>
                         <children>
-                            <refused_transactions translate="title">
+                            <index translate="title">
                                 <title>Refused transactions</title>
                                 <sort_order>10</sort_order>
-                            </refused_transactions>
+                            </index>
                         </children>
-                    </pagarme_menus>
+                    </refusedtransactions>
                 </children>
             </admin>
         </resources>

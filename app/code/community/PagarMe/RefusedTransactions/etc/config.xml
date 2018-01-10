@@ -31,6 +31,17 @@
             </updates>
         </layout>
     </adminhtml>
+    <admin>
+        <routers>
+            <refusedtransactions module="pagarme_refusedtransactions">
+                <use>admin</use>
+                <args>
+                    <module>PagarMe_RefusedTransactions</module>
+                    <front>pagarme</front>
+                </args>
+            </refusedtransactions>
+        </routers>
+    </admin>
     <default>
         <news>
             <pagarme_refusedtransactions>
