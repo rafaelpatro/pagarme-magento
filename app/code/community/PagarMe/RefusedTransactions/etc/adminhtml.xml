@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
     <menu>
-        <pagarmetab module="pagarme_refusedtransactions">
+        <pagarmetab translate="title" module="pagarme_refusedtransactions">
             <title>Pagar.me</title>
             <sort_order>100</sort_order>
             <children>
-                <index module="pagarme_refusedtransactions">
+                <refusedtransactions module="pagarme_refusedtransactions">
                     <title>Refused Transactions</title>
                     <action>adminhtml/refusedtransactions</action>
-                </index>
+                </refusedtransactions>
             </children>
         </pagarmetab>
     </menu>
@@ -16,16 +16,16 @@
         <resources>
             <admin>
                 <children>
-                    <refusedtransactions translate="title" module="pagarme_refusedtransactions">
-                        <title>Refused transactions</title>
+                    <pagarmetab translate="title" module="pagarme_refusedtransactions">
+                        <title>Pagar.me Top level menu item</title>
                         <sort_order>1000</sort_order>
                         <children>
-                            <index translate="title">
-                                <title>Refused transactions</title>
+                            <refusedtransactions translate="title">
+                                <title>Refused transactions menu item</title>
                                 <sort_order>10</sort_order>
-                            </index>
+                            </refusedtransactions>
                         </children>
-                    </refusedtransactions>
+                    </pagarmetab>
                 </children>
             </admin>
         </resources>
