@@ -33,13 +33,13 @@
     </adminhtml>
     <admin>
         <routers>
-            <refusedtransactions module="pagarme_refusedtransactions">
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>PagarMe_RefusedTransactions</module>
-                    <front>pagarme</front>
+                    <modules>
+                        <PagarMe_RefusedTransactions after="Mage_Adminhtml">PagarMe_RefusedTransactions_Adminhtml</PagarMe_RefusedTransactions>
+                    </modules>
                 </args>
-            </refusedtransactions>
+            </adminhtml>
         </routers>
     </admin>
     <default>

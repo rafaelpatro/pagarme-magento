@@ -4,11 +4,7 @@ class PagarMe_RefusedTransactions_Adminhtml_RefusedTransactionsController extend
 {
     public function indexAction()
     {
-        echo 'hello world';
-    }
-
-    public function refusedtransactionsAction()
-    {
-        echo 'hola mundo';
+        $this->loadLayout();
+        $this->renderLayout();
     }
 }

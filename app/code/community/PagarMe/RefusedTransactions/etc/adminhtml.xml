@@ -7,7 +7,7 @@
             <children>
                 <refusedtransactions module="pagarme_refusedtransactions">
                     <title>Refused Transactions</title>
-                    <action>adminhtml/refusedtransactions</action>
+                    <action>adminhtml/refusedTransactions</action>
                 </refusedtransactions>
             </children>
         </pagarmetab>
