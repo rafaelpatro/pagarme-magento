@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layout version="0.1.0">
+    <adminhtml_refusedtransactions_index>
+        <reference name="content">
+            <block
+                type="pagarme_refusedtransactions/adminhtml_transactions"
+                name="transactions"
+            />
+        </reference>
+    </adminhtml_refusedtransactions_index>
+</layout>

@@ -6,5 +6,7 @@ class PagarMe_RefusedTransactions_Adminhtml_RefusedTransactionsController extend
     {
         $this->loadLayout();
         $this->renderLayout();
+
+        return $this;
     }
 }
