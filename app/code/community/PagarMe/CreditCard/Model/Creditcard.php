@@ -157,21 +157,10 @@ class PagarMe_CreditCard_Model_Creditcard extends Mage_Payment_Model_Method_Abst
      */
     public function generateCard($cardHash)
     {
-        try {
-            $card = $this->sdk
-                ->card()
-                ->createFromHash($cardHash);
-            return $card;
-        } catch (\Exception $exception) {
-            $error = json_decode($exception->getMessage());
-            $error = json_decode($error);
-
-            $response = array_reduce($error->errors, function ($carry, $item) {
-                return is_null($carry) ? $item->message : $carry."\n".$item->message;
-            });
-
-            throw new GenerateCardException($response);
-        }
+        $card = $this->sdk
+            ->card()
+            ->createFromHash($cardHash);
+        return $card;
     }
 
     /**
@@ -221,6 +210,7 @@ class PagarMe_CreditCard_Model_Creditcard extends Mage_Payment_Model_Method_Abst
         $capture = false
     ) {
         $quote = Mage::getSingleton('checkout/session')->getQuote();
+
         $this->transaction = $this->sdk
             ->transaction()
             ->creditCardTransaction(
@@ -231,7 +221,6 @@ class PagarMe_CreditCard_Model_Creditcard extends Mage_Payment_Model_Method_Abst
                 $installments,
                 $capture
             );
-
         return $this;
     }
 
@@ -289,8 +278,12 @@ class PagarMe_CreditCard_Model_Creditcard extends Mage_Payment_Model_Method_Abst
             Mage::throwException($exception);
         } catch (CantCaptureTransaction $exception) {
             Mage::logException($exception);
+        } catch (\PagarMe\Sdk\ClientException $clientException) {
+            Mage::throwException(
+                'Erro na conexão com o meio de pagamento. Tente mais tarde'
+            );
         } catch (\Exception $exception) {
-            Mage::logException('Exception autorizing:');
+            Mage::logException('Exception auhorizing:');
             Mage::logException($exception);
             $json = json_decode($exception->getMessage());
             $json = json_decode($json);
