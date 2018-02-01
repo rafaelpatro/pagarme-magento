@@ -6,14 +6,24 @@ class PagarMe_Core_Model_CurrentOrder
     private $quote;
     private $pagarMeSdk;
     private $coreHelper;
+    private $modalHelper;
 
     public function __construct(
         Mage_Sales_Model_Quote $quote,
-        PagarMe_Core_Model_Sdk_Adapter $pagarMeSdk
+        PagarMe_Core_Model_Sdk_Adapter $pagarMeSdk,
+        $coreHelper = null,
+        $modalHelper = null
     ) {
         $this->quote = $quote;
         $this->pagarMeSdk = $pagarMeSdk;
-        $this->coreHelper = Mage::helper('pagarme_core');
+        $this->coreHelper = $coreHelper;
+        if (is_null($coreHelper)) {
+            $this->coreHelper = Mage::helper('pagarme_core');
+        }
+        $this->modalHelper = $modalHelper;
+        if (is_null($modalHelper)) {
+            $this->modalHelper = Mage::helper('pagarme_modal');
+        }
     }
 
     public function calculateInstallments(
@@ -93,9 +103,7 @@ class PagarMe_Core_Model_CurrentOrder
     //the pagarme checkout also applies the intereset to the shipping
     private function interestAmountWhenTokenIsPresentInBRL()
     {
-        $transaction = Mage::app()
-            ->getHelper('pagarme_modal')
-            ->getTransaction();
+        $transaction = $this->modalHelper->getTransaction();
         $subtotalWithShipping = $this->productsTotalValueInCents() +
             $this->shippingValueInCents();
         return $this->coreHelper
