@@ -10,6 +10,7 @@ Feature: Credit Card
         And I go to checkout page
         And login with registered user
         And confirm billing and shipping address information
+        And I wait for payment block be visible
         And choose pay with transparent checkout using credit card
         And I confirm my payment information
         And place order

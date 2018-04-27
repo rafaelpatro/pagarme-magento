@@ -252,15 +252,24 @@ class CreditCardContext extends RawMinkContext
     }
 
     /**
+     * @When I wait for payment block be visible
+     */
+    public function iWaitForPaymentBlockBeVisible()
+    {
+        echo $this->takeAScreenshot();
+        $this->session->wait(600);
+        echo $this->takeAScreenshot();
+    }
+
+    /**
      * @When choose pay with transparent checkout using credit card
      */
     public function choosePayWithTransparentCheckoutUsingCreditCard()
     {
         $page = $this->session->getPage();
 
-        $this->waitForElementType('#checkout-step-payment', 60, $page);
-
-        $this->waitForElementType('#p_method_pagarme_creditcard', 120, $page);
+        $this->waitForElement('#p_method_pagarme_creditcard', 60);
+        echo $this->takeAScreenshot();
         $page->find(
             'css',
             '#p_method_pagarme_creditcard'

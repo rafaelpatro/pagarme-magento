@@ -1,7 +1,7 @@
 <?php
 namespace PagarMe\Magento\Test\HookHandler;
 
-use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Behat\Hook\Scope\StepScope;
 use GuzzleHttp;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7;
@@ -10,10 +10,10 @@ trait ScreenshotAfterFailedStep
 {
     protected function getImgurClientID()
     {
-        return getenv('IMGUR_CLIENT_ID');
+        return 'c7aabd17e35f545';
     }
 
-    protected function getScreenshot(AfterStepScope $scope)
+    protected function getScreenshot()
     {
         $driver = $this->getSession()->getDriver();
         $image = base64_encode($driver->getScreenshot());
@@ -23,8 +23,13 @@ trait ScreenshotAfterFailedStep
 
     protected function processResponse($response)
     {
-        $json = json_decode($response->getBody());
-        return $json->data->link;
+        $link = '';
+        if ($response->getStatusCode() == '200') {
+            $json = json_decode($response->getBody());
+            $link = $json->data->link;
+        }
+
+        return $link;
     }
 
     protected function sendToImgur($image)
@@ -50,7 +55,15 @@ trait ScreenshotAfterFailedStep
                 $requestParams
             );
         } catch (RequestException $requestException) {
-            var_dump($requestException->getResponse());
+            $response = $requestException->getResponse();
+            $statusCode = $response->getStatusCode();
+            $reason = $response->getReasonPhrase();
+            var_dump($response);
+            echo sprintf(
+                "I can't upload the screenshot. %s - %s",
+                $statusCode,
+                $reason
+            );
         } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
@@ -59,24 +72,31 @@ trait ScreenshotAfterFailedStep
     }
 
     /**
-     * @AfterStep
+     * @return string
      */
-    public function takeAScreenshot(AfterStepScope $scope)
+    public function takeAScreenshot()
     {
-        $isPassed = $scope->getTestResult()->isPassed();
-//        if ($isPassed) {
-//            return;
-//        }
-
         $clientID = $this->getImgurClientID();
         if(empty($clientID)) {
             throw \Exception('You need to inform your imgur client ID to take screenshots');
         }
 
-        $image = $this->getScreenshot($scope);
+        $image = $this->getScreenshot();
         $response = $this->sendToImgur($image);
         $link = $this->processResponse($response);
 
-        echo $link;
+        return $link;
+    }
+
+    /**
+     * @AfterStep
+     */
+    public function takeAScreenshotFromStep(StepScope $scope)
+    {
+//        $isPassed = $scope->getTestResult()->isPassed();
+//        if ($isPassed) {
+//            return;
+//        }
+        echo $this->takeAScreenshot();
     }
 }

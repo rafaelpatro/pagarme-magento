@@ -34,6 +34,8 @@ trait SessionWait
                     return true;
                 }
             } catch (Exception $e) {
+                if($element == '#p_method_pagarme_creditcard')
+                    throw new \Exception('Element not found');
             }
             sleep($waitTimeDelayInSeconds);
             $waitedTimeInSeconds += $waitTimeDelayInSeconds;
