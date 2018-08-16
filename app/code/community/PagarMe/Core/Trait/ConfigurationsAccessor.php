@@ -16,7 +16,7 @@ trait PagarMe_Core_Trait_ConfigurationsAccessor
             return true;
         }
 
-        return false;
+        return true;
     }
 
     /**

@@ -362,13 +362,15 @@ class PagarMe_CreditCard_Model_Creditcard extends PagarMe_Core_Model_AbstractPay
         CreditCardTransaction $transaction,
         Varien_Object $payment
     ) {
-        switch ($transaction->getStatus()) {
-            case AbstractTransaction::PROCESSING:
-            case AbstractTransaction::REFUSED:
-            case 'pending_review':
-                $payment->setIsTransactionPending(true);
-                break;
+        $status = $transaction->getStatus();
+
+        if ($status === AbstractTransaction::PROCESSING
+            || $status === AbstractTransaction::REFUSED
+            || $status === 'pending_review'
+        ) {
+            $payment->setIsTransactionPending(true);
         }
+
         return $payment;
     }
 

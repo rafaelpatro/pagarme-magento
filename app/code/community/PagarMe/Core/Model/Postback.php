@@ -6,6 +6,7 @@ class PagarMe_Core_Model_Postback extends Mage_Core_Model_Abstract
     const POSTBACK_STATUS_REFUNDED = 'refunded';
     const POSTBACK_STATUS_AUTHORIZED = 'authorized';
     const POSTBACK_STATUS_REFUSED = 'refused';
+    const POSTBACK_STATUS_PENDING_REVIEW = 'pending_review';
 
     /**
      * @var PagarMe_Core_Model_Service_Order
@@ -29,15 +30,11 @@ class PagarMe_Core_Model_Postback extends Mage_Core_Model_Abstract
             return true;
         }
 
-        if ($currentStatus == self::POSTBACK_STATUS_REFUNDED) {
-            return true;
-        }
-
-        if ($currentStatus == self::POSTBACK_STATUS_AUTHORIZED) {
-            return true;
-        }
-
-        if ($currentStatus == self::POSTBACK_STATUS_REFUSED) {
+        if ($currentStatus === self::POSTBACK_STATUS_REFUNDED
+            || $currentStatus === self::POSTBACK_STATUS_AUTHORIZED
+            || $currentStatus === self::POSTBACK_STATUS_REFUSED
+            || $currentStatus === self::POSTBACK_STATUS_PENDING_REVIEW
+        ) {
             return true;
         }
 
@@ -94,31 +91,37 @@ class PagarMe_Core_Model_Postback extends Mage_Core_Model_Abstract
      * @param int $transactionId
      * @param string $currentStatus
      *
-     * @return type
+     * @return Mage_Sales_Model_Order
      * @throws Exception
      */
     public function processPostback($transactionId, $currentStatus)
     {
+
         $order = $this->getOrderService()
             ->getOrderByTransactionId($transactionId);
 
-        if (!$this->canProceedWithPostback($order, $currentStatus)) {
+        if (false === $this->canProceedWithPostback($order, $currentStatus)) {
             throw new Exception(
                 Mage::helper('pagarme_core')->__('Can\'t proccess postback '.$currentStatus.'.')
             );
         }
 
+        var_dump($currentStatus);//die();
         switch ($currentStatus) {
             case self::POSTBACK_STATUS_PAID:
+                var_dump(self::POSTBACK_STATUS_PAID);
                 $this->setOrderAsPaid($order);
                 break;
             case self::POSTBACK_STATUS_REFUNDED:
+                var_dump(self::POSTBACK_STATUS_REFUNDED);
                 $this->setOrderAsRefunded($order);
                 break;
             case self::POSTBACK_STATUS_AUTHORIZED:
+                var_dump(self::POSTBACK_STATUS_AUTHORIZED);
                 $this->setOrderAsAuthorized($order);
                 break;
             case self::POSTBACK_STATUS_REFUSED:
+                var_dump(self::POSTBACK_STATUS_REFUSED);
                 $this->setOrderAsRefused($order);
                 break;
         }
@@ -138,7 +141,7 @@ class PagarMe_Core_Model_Postback extends Mage_Core_Model_Abstract
         $invoice->register()
             ->pay();
 
-        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, "pago");
+        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'pago');
 
         $transactionSave = Mage::getModel('core/resource_transaction')
             ->addObject($order)
@@ -167,7 +170,7 @@ class PagarMe_Core_Model_Postback extends Mage_Core_Model_Abstract
 
     /**
      * @param Mage_Sales_Model_Order $order
-     * @return void
+     * @return Mage_Sales_Model_Order
      */
     public function setOrderAsRefunded($order)
     {
@@ -191,6 +194,7 @@ class PagarMe_Core_Model_Postback extends Mage_Core_Model_Abstract
             $transaction->addObject($creditmemo);
         }
         $transaction->addObject($order)->save();
+
         return $order;
     }
 
