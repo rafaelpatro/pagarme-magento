@@ -89,4 +89,14 @@
             </pagarme_configurations>
         </payment>
     </default>
+    <sales>
+        <quote>
+            <totals>
+                <rate_amount>
+                    <class>pagarme_credit_card/quote_address_total_CreditCardInterestAmount</class>
+                    <after>grand_total</after>
+                </rate_amount>
+            </totals>
+        </quote>
+    </sales>
 </config>

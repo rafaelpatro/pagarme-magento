@@ -13,6 +13,7 @@ class PagarMe_Core_Model_CurrentOrder
         $this->quote = $quote;
         $this->pagarMeSdk = $pagarMeSdk;
     }
+
     public function calculateInstallments(
         $maxInstallments,
         $freeInstallments,
@@ -33,7 +34,7 @@ class PagarMe_Core_Model_CurrentOrder
     //there's also Basesubtotal = subtotal in the store's currency
     public function productsTotalValueInCents()
     {
-        $total = $this->quote->getTotals()['subtotal']->getValue();
+        $total = $this->quote->getData()['grand_total'];
         return Mage::helper('pagarme_core')->parseAmountToInteger($total);
     }
 
