@@ -62,6 +62,13 @@ trait PagarMe_Core_Trait_ConfigurationsAccessor
         );
     }
 
+    private function getMinInstallmentValueStoreConfig()
+    {
+        return (float) $this->getConfigurationWithName(
+            'pagarme_configurations/creditcard_min_installment_value'
+        );
+    }
+
     public function getEncryptionKeyStoreConfig()
     {
         return $this->getConfigurationWithName(
