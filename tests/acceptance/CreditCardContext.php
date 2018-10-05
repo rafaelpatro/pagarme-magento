@@ -632,7 +632,7 @@ class CreditCardContext extends RawMinkContext
 
         $invoiceInterest = $this->session->evaluateScript(
                 "return document.querySelector(
-                    '.order-totals td:last-child > .price'
+                    '.order-totals tr:last-child > td:last-child > .price'
                 ).innerHTML;"
             );
 

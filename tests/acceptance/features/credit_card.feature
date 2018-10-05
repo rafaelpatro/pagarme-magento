@@ -149,7 +149,7 @@ Feature: Credit Card
         Given a existing order
         When I login to the admin
         And I check the invoice interest amount in its admin detail page
-        Then the interest value should be "11.22" in the invoice details
+        Then the interest value should be "16.22" in the invoice details
 
     @capture_online @skipTest
     Scenario: Capture a purchase by credit card through the platform
