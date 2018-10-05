@@ -151,6 +151,12 @@ Feature: Credit Card
         And I check the invoice interest amount in its admin detail page
         Then the interest value should be "11.22" in the invoice details
 
+    Scenario: Check if in an existing order's creditmemo totals is correct
+        Given a existing order
+        When I login to the admin
+        And I check the creditmemo totals in its admin detail page
+        Then the interest value and grand total must be correct
+
     @capture_online @skipTest
     Scenario: Capture a purchase by credit card through the platform
         Given a created order authorized only
