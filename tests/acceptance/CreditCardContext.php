@@ -649,10 +649,10 @@ class CreditCardContext extends RawMinkContext
         $this->session->wait(3000);
 
         $invoiceInterest = $this->session->evaluateScript(
-                "return document.querySelector(
-                    '.order-totals td:last-child > .price'
-                ).innerHTML;"
-            );
+            "return document.querySelector(
+                '.order-totals tr:last-child > td:last-child > .price'
+            ).innerHTML;"
+        );
 
         \PHPUnit_Framework_TestCase::assertEquals('R$'.$interest, $invoiceInterest);
     }
