@@ -187,9 +187,23 @@ class PagarMe_CreditCard_Model_Creditcard extends PagarMe_Core_Model_AbstractPay
         return $this;
     }
 
+    /**
+     * @param Mage_Sales_Model_Quote $quote
+     *
+     * @return void
+     */
     public function setQuote(Mage_Sales_Model_Quote $quote)
     {
         $this->quote = $quote;
+    }
+
+    /**
+     * @param CreditCardTransaction $transaction
+     *
+     * @return void
+     */
+    public function setTransaction(CreditCardTransaction $transaction) {
+        $this->transaction = $transaction;
     }
 
     /**
@@ -423,43 +437,6 @@ class PagarMe_CreditCard_Model_Creditcard extends PagarMe_Core_Model_AbstractPay
         return $payment;
     }
 
-    /**
-     * @param \PagarMe\Sdk\Card\Card $card
-     * @param \PagarMe\Sdk\Customer\Customer $customer
-     * @param int $installments
-     * @param bool $capture
-     * @param string $postbackUrl
-     * @param array $metadata
-     * @param array $extraAttributes
-     *
-     * @return self
-     */
-    public function createTransaction(
-        PagarmeCard $card,
-        PagarmeCustomer $customer,
-        $installments = 1,
-        $capture = false,
-        $postbackUrl = null,
-        $metadata = [],
-        $extraAttributes = []
-    ) {
-        $this->transaction = $this->sdk
-            ->transaction()
-            ->creditCardTransaction(
-                $this->pagarmeCoreHelper
-                    ->parseAmountToInteger($this->quote->getGrandTotal()),
-                $card,
-                $customer,
-                $installments,
-                $capture,
-                $postbackUrl,
-                $metadata,
-                $extraAttributes
-            );
-
-        return $this;
-    }
-
     private function buildRefusedReasonMessage()
     {
         $refusedMessage = 'Unauthorized';
@@ -635,15 +612,20 @@ class PagarMe_CreditCard_Model_Creditcard extends PagarMe_Core_Model_AbstractPay
                 'async' => (bool)$asyncTransaction,
                 'reference_key' => $referenceKey
             ];
-            $this->createTransaction(
-                $card,
-                $customerPagarMe,
-                $installments,
-                $captureTransaction,
-                $postbackUrl,
-                ['order_id' => $order->getIncrementId()],
-                $extraAttributes
-            );
+
+            $this->transaction = $this->sdk
+                ->transaction()
+                ->creditCardTransaction(
+                    $this->pagarmeCoreHelper
+                        ->parseAmountToCents($amount),
+                    $card,
+                    $customerPagarMe,
+                    $installments,
+                    $captureTransaction,
+                    $postbackUrl,
+                    ['order_id' => $order->getIncrementId()],
+                    $extraAttributes
+                );
 
             $order->setPagarmeTransaction($this->transaction);
             $this->checkInstallments($installments);
