@@ -37,6 +37,9 @@
                 <pagarme_boleto>
                     <file>pagarme/pagarme_boleto.xml</file>
                 </pagarme_boleto>
+                <pagarme>
+                	<file></file>
+                </pagarme>
             </updates>
         </layout>
     </frontend>
